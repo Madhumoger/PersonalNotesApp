@@ -8,6 +8,7 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.cValue
 import platform.CoreGraphics.CGRectMake
 import platform.WebKit.*
+import platform.WebKit.WKAudiovisualMediaTypesNone
 import platform.darwin.NSObject
 
 @OptIn(ExperimentalForeignApi::class)
@@ -35,6 +36,11 @@ actual fun HtmlViewer(
             val configuration = WKWebViewConfiguration()
             val userContentController = WKUserContentController()
 
+            // Enable JavaScript and other settings
+            configuration.allowsInlineMediaPlayback = true
+            configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypesNone
+            configuration.suppressesIncrementalRendering = false
+
             // Add the message handler
             userContentController.addScriptMessageHandler(
                 messageHandler,
@@ -48,7 +54,9 @@ actual fun HtmlViewer(
             val script = """
                 window.JavaScriptBridge = {
                     postMessage: function(msg) {
-                        window.webkit.messageHandlers.JavaScriptBridge.postMessage(msg);
+                        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.JavaScriptBridge) {
+                            window.webkit.messageHandlers.JavaScriptBridge.postMessage(msg);
+                        }
                     }
                 };
             """.trimIndent()
