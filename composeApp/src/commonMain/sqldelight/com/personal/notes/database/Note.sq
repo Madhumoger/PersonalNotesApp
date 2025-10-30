@@ -1,0 +1,29 @@
+-- Note table schema
+CREATE TABLE IF NOT EXISTS NoteEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    createdDate INTEGER NOT NULL
+);
+
+-- Queries
+getAllNotes:
+SELECT *
+FROM NoteEntity
+ORDER BY createdDate DESC;
+
+getNoteById:
+SELECT *
+FROM NoteEntity
+WHERE id = ?;
+
+insertNote:
+INSERT INTO NoteEntity(title, body, createdDate)
+VALUES (?, ?, ?);
+
+deleteNoteById:
+DELETE FROM NoteEntity
+WHERE id = ?;
+
+getLastInsertedId:
+SELECT last_insert_rowid();
