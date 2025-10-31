@@ -1,4 +1,4 @@
-rootProject.name = "PersonalNotesApp"
+rootProject.name = "MadNoteX"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

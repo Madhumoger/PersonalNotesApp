@@ -1,6 +1,6 @@
-# Personal Notes App
+# MadNoteX
 
-A modern, cross-platform Personal Notes application built with **Kotlin Multiplatform** and **Compose Multiplatform**, running seamlessly on both Android and iOS.
+A modern, cross-platform note-taking application built with **Kotlin Multiplatform** and **Compose Multiplatform**, running seamlessly on both Android and iOS.
 
 ## 📱 Features
 
@@ -18,7 +18,7 @@ A modern, cross-platform Personal Notes application built with **Kotlin Multipla
 The app follows **MVVM (Model-View-ViewModel)** architecture with Clean Architecture principles:
 
 ```
-PersonalNotesApp/
+MadNoteX/
 ├── composeApp/
 │   ├── commonMain/
 │   │   ├── kotlin/com/personal/notes/
