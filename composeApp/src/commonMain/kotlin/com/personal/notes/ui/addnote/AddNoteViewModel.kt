@@ -60,7 +60,6 @@ class AddNoteViewModel(
     }
 }
 
-//UI state for Add Note screen
 data class AddNoteUiState(
     val title: String = "",
     val body: String = "",

@@ -22,7 +22,6 @@ actual fun HtmlViewer(
                 settings.domStorageEnabled = true
                 webViewClient = WebViewClient()
 
-                // Add JavaScript interface to receive messages from HTML
                 addJavascriptInterface(
                     object {
                         @JavascriptInterface

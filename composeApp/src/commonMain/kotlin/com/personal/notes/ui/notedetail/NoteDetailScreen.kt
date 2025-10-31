@@ -22,9 +22,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.koinInject
 
-/**
- * Note Detail Screen - displays a note with HTML rendering
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDetailScreen(
@@ -117,7 +114,7 @@ fun NoteDetailScreen(
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        // Note info card
+
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
@@ -129,14 +126,14 @@ fun NoteDetailScreen(
                                 modifier = Modifier.padding(16.dp)
                             ) {
                                 Text(
-                                    text = "Created: ${formatDate(note!!.createdDate)}",
+                                    text = "Created on: ${formatDate(note!!.createdDate)}",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSecondaryContainer
                                 )
                             }
                         }
 
-                        // HTML viewer
+
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -148,12 +145,6 @@ fun NoteDetailScreen(
                                 onMessageReceived = { message ->
                                     clickedMessage = message
                                     showDialog = true
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = message,
-                                            duration = SnackbarDuration.Short
-                                        )
-                                    }
                                 },
                                 modifier = Modifier.fillMaxSize()
                             )
@@ -164,68 +155,51 @@ fun NoteDetailScreen(
         }
     }
 
-    // ModalBottomSheet to show clicked message
-//    if (showDialog && clickedMessage != null) {
-//        ModalBottomSheet(
-//            onDismissRequest = { showDialog = false },
-//            sheetState = rememberModalBottomSheetState()
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(24.dp)
-//                    .padding(bottom = 32.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.spacedBy(16.dp)
-//            ) {
-//                // Icon
-//                Icon(
-//                    imageVector = Icons.Default.Info,
-//                    contentDescription = null,
-//                    modifier = Modifier.size(56.dp),
-//                    tint = MaterialTheme.colorScheme.primary
-//                )
-//
-//                // Title
-//                Text(
-//                    text = "HTML Message Clicked",
-//                    style = MaterialTheme.typography.titleLarge,
-//                    color = MaterialTheme.colorScheme.onSurface
-//                )
-//
-//                // Message content
-//                Card(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    colors = CardDefaults.cardColors(
-//                        containerColor = MaterialTheme.colorScheme.secondaryContainer
-//                    ),
-//                    shape = RoundedCornerShape(12.dp)
-//                ) {
-//                    Text(
-//                        text = clickedMessage ?: "",
-//                        style = MaterialTheme.typography.bodyLarge,
-//                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(20.dp)
-//                    )
-//                }
-//
-//                // Close button
-//                Button(
-//                    onClick = { showDialog = false },
-//                    modifier = Modifier.fillMaxWidth(),
-//                    shape = RoundedCornerShape(12.dp)
-//                ) {
-//                    Text(
-//                        text = "Close",
-//                        modifier = Modifier.padding(vertical = 4.dp)
-//                    )
-//                }
-//            }
-//        }
-//    }
+    if (showDialog && clickedMessage != null) {
+        ModalBottomSheet(
+            onDismissRequest = { showDialog = false },
+            sheetState = rememberModalBottomSheetState()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .padding(bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "HTML Message Clicked",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Text(
+                    text = clickedMessage ?: "",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Button(
+                    onClick = { showDialog = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Close")
+                }
+            }
+        }
+    }
 }
 
 private fun formatDate(instant: Instant): String {

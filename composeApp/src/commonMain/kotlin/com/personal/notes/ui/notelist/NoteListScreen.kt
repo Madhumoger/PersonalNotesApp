@@ -110,7 +110,6 @@ fun NoteListScreen(
         }
     }
 
-    // Delete confirmation dialog
     noteToDelete?.let { note ->
         AlertDialog(
             onDismissRequest = { noteToDelete = null },

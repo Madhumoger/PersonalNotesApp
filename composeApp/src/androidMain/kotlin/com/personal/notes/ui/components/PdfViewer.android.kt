@@ -3,6 +3,8 @@ package com.personal.notes.ui.components
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
@@ -10,8 +12,17 @@ import androidx.compose.ui.viewinterop.AndroidView
 @Composable
 actual fun PdfViewer(
     url: String,
-    modifier: Modifier
+    modifier: Modifier,
+    onLoadingStateChange: (Boolean) -> Unit
 ) {
+    val viewerUrl = remember(url) {
+        "https://docs.google.com/gview?embedded=true&url=$url"
+    }
+    
+    LaunchedEffect(url) {
+        onLoadingStateChange(true)
+    }
+
     AndroidView(
         modifier = modifier,
         factory = { context ->
@@ -22,13 +33,23 @@ actual fun PdfViewer(
                 settings.useWideViewPort = true
                 settings.builtInZoomControls = true
                 settings.displayZoomControls = false
-                webViewClient = WebViewClient()
+                webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        onLoadingStateChange(false)
+                    }
+
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        onLoadingStateChange(true)
+                    }
+                }
             }
         },
         update = { webView ->
-            // Use Google Docs viewer to display PDF
-            val viewerUrl = "https://docs.google.com/gview?embedded=true&url=$url"
-            webView.loadUrl(viewerUrl)
+            if (webView.url != viewerUrl) {
+                webView.loadUrl(viewerUrl)
+            }
         }
     )
 }

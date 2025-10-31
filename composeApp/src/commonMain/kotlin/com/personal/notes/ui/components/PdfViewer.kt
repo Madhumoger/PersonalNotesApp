@@ -6,5 +6,6 @@ import androidx.compose.ui.Modifier
 @Composable
 expect fun PdfViewer(
     url: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLoadingStateChange: (Boolean) -> Unit = {}
 )

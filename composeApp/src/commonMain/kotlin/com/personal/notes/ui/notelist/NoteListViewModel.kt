@@ -48,8 +48,6 @@ class NoteListViewModel(
     }
 }
 
-
- // UI state for Notes List screen
 sealed class NoteListUiState {
     data object Loading : NoteListUiState()
     data object Empty : NoteListUiState()

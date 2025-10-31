@@ -36,21 +36,17 @@ actual fun HtmlViewer(
             val configuration = WKWebViewConfiguration()
             val userContentController = WKUserContentController()
 
-            // Enable JavaScript and other settings
             configuration.allowsInlineMediaPlayback = true
             configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypesNone
             configuration.suppressesIncrementalRendering = false
 
-            // Add the message handler
             userContentController.addScriptMessageHandler(
                 messageHandler,
                 "JavaScriptBridge"
             )
 
-            // ✅ Correct enum usage
             val injectionTime = WKUserScriptInjectionTime.WKUserScriptInjectionTimeAtDocumentStart
 
-            // JavaScript bridge script
             val script = """
                 window.JavaScriptBridge = {
                     postMessage: function(msg) {
@@ -61,7 +57,6 @@ actual fun HtmlViewer(
                 };
             """.trimIndent()
 
-            // Add user script
             val userScript = WKUserScript(
                 source = script,
                 injectionTime = injectionTime,

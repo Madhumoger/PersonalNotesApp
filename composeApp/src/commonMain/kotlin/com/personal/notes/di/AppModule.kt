@@ -10,14 +10,12 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    // Database
     single { get<DatabaseDriverFactory>().createDriver() }
     single { NotesDatabase(get()) }
-    
-    // Repository
+
     single<NoteRepository> { NoteRepositoryImpl(get()) }
     
-    // ViewModels
+
     viewModel { NoteListViewModel(get()) }
     viewModel { AddNoteViewModel(get()) }
 }

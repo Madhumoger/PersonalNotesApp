@@ -40,39 +40,33 @@ fun PdfViewerScreen(
             )
         }
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Loading indicator
             if (isLoading) {
-                Column(
+                Box(
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxWidth()
+                        .height(6.dp)
                 ) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Loading PDF...",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
                     )
                 }
             }
 
-            // PDF Viewer
-            PdfViewer(
-                url = pdfUrl,
-                modifier = Modifier.fillMaxSize()
-            )
-
-            // Hide loading after a delay (WebView doesn't have load callbacks in common code)
-            LaunchedEffect(Unit) {
-                kotlinx.coroutines.delay(2000)
-                isLoading = false
+            Box(modifier = Modifier.fillMaxSize()) {
+                PdfViewer(
+                    url = pdfUrl,
+                    modifier = Modifier.fillMaxSize(),
+                    onLoadingStateChange = { loading ->
+                        isLoading = loading
+                    }
+                )
             }
         }
     }

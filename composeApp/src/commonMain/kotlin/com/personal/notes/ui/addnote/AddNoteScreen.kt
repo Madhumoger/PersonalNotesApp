@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -26,7 +27,8 @@ fun AddNoteScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -46,7 +48,15 @@ fun AddNoteScreen(
                         onClick = {
                             viewModel.saveNote(
                                 onSuccess = onNoteSaved,
-                                onError = { errorMessage = it }
+                                onError = { errorMessage ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = errorMessage,
+                                            duration = SnackbarDuration.Long,
+                                            withDismissAction = true
+                                        )
+                                    }
+                                }
                             )
                         }
                     ) {
@@ -61,7 +71,8 @@ fun AddNoteScreen(
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -175,17 +186,6 @@ fun AddNoteScreen(
             }
         ) {
             DatePicker(state = datePickerState)
-        }
-    }
-
-    errorMessage?.let { message ->
-        LaunchedEffect(message) {
-            errorMessage = null
-        }
-        Snackbar(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(message)
         }
     }
 }
