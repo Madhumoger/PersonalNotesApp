@@ -1,4 +1,4 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -6,12 +6,11 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.sqldelight)
-    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
     androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -35,7 +34,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.sqldelight.android)
             implementation(libs.koin.android)
         }
         commonMain.dependencies {
@@ -49,25 +47,15 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             
-            // Navigation
-            implementation(libs.navigation.compose)
-            
-            // SQLDelight
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.sqldelight.coroutines)
-            
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
             
-            // Kotlinx
-            implementation(libs.kotlinx.coroutines)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.kotlinx.serialization.json)
+            // Shared modules
+            api(projects.shared.featureNotes)
         }
         iosMain.dependencies {
-            implementation(libs.sqldelight.native)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -76,11 +64,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.personal.notes"
+    namespace = "com.personal.madNotex"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.personal.notes"
+        applicationId = "com.personal.madNotex"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -104,12 +92,4 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-}
-
-sqldelight {
-    databases {
-        create("NotesDatabase") {
-            packageName.set("com.personal.notes.database")
-        }
-    }
 }

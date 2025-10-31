@@ -18,3 +18,9 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 .cursorrules
+
+/shared/core-common/build.gradle.kts
+/shared/core-navigation/build.gradle.kts
+/shared/core-database/build.gradle.kts
+/shared/feature-notes/build.gradle.kts
+/shared/localization/build.gradle.kts

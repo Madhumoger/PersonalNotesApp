@@ -29,3 +29,8 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":shared:core-database")
+include(":shared:core-navigation")
+include(":shared:core-common")
+include(":shared:localization")
+include(":shared:feature-notes")
